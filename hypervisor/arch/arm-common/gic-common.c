@@ -29,19 +29,6 @@ u8 gicv2_target_cpu_map[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 DEFINE_SPINLOCK(dist_lock);
 
-/* Check that the targeted interface belongs to the cell */
-bool gic_targets_in_cell(struct cell *cell, u8 targets)
-{
-	unsigned int cpu;
-
-	for (cpu = 0; cpu < ARRAY_SIZE(gicv2_target_cpu_map); cpu++)
-		if (targets & gicv2_target_cpu_map[cpu] &&
-		    per_cpu(cpu)->cell != cell)
-			return false;
-
-	return true;
-}
-
 /*
  * Most of the GIC distributor writes only reconfigure the IRQs corresponding to
  * the bits of the written value, by using separate `set' and `clear' registers.
